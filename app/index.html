@@ -1,0 +1,61 @@
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/vuex"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.js"></script>
+<script src="../../store.js"></script>
+
+<div id="app">
+  {{message}}
+  <!--
+  something warning message with using `v-model`
+  <input type="text" v-model="inputText" @input="onChangeText"/>
+  -->
+  <input type="text" :value="inputText" @input="onChangeText"/>
+  <button @click="onAdd">Add</button>
+  <button @click="onTest">Test append button</button>
+
+  <ul id="example-1">
+    <li v-for="item in list">
+      {{ item.title }} <button @click="onDel(item)">X</button>
+    </li>
+  </ul>
+</div>
+
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!',
+  },
+  store,
+  computed: {
+    list() {
+      return this.$store.getters.activeList
+    },
+    inputText () {
+      return this.$store.getters.getInputText
+    }
+  },
+  methods: {
+    onAdd (event) {
+      console.log('on add')
+      // this.$store.commit('addItem')
+      this.$store.dispatch('addItem')
+    },
+    onChangeText( event) {
+      console.log('on change text')
+      console.log(event.target.value)
+      this.$store.commit('changeText', event.target.value)
+    },
+    onTest () {
+      console.log('on test')
+      this.$store.dispatch('appendText')
+    },
+    onDel (item) {
+      console.log('on del', item)
+      this.$store.dispatch('delItem', item)
+    }
+  }
+})
+
+
+</script>
